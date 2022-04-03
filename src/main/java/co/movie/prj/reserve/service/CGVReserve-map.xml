@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.movie.prj.reserve.service.CHReserveMapper">
+
+	<select id="getReserveCount"
+		resultType="co.movie.prj.reserve.service.CHReserveVO">
+		SELECT COUNT(*) CNT FROM RESERVE WHERE TO_CHAR(RESERVE_RESERVEDATE,'YYYYMMDD') = TO_CHAR(SYSDATE,'YYYYMMDD')
+	</select>
+
+	<select id="getReserveList"
+		parameterType="co.movie.prj.reserve.service.CHReserveVO"
+		resultType="co.movie.prj.reserve.service.CHReserveVO">
+		SELECT * FROM
+		RESERVE WHERE RESERVE_USERID =
+		#{reserve_userid }
+	</select>
+
+	<select id="getReserveSeat"
+		resultType="co.movie.prj.reserve.service.CHReserveVO">
+		SELECT RESERVE_SELECTEDSEAT FROM
+		RESERVE WHERE
+		RESERVE_MOVIEID = #{reserve_movieid }
+	</select>
+
+	<select id="reserveSelectListTitle"
+		resultType="co.movie.prj.reserve.service.CHReserveVO">
+		SELECT DISTINCT MOVIE_RESERVE_TITLE FROM MOVIE_RESERVE
+	</select>
+
+	<select id="reserveSelectDate"
+		resultType="co.movie.prj.reserve.service.CHReserveVO">
+		SELECT MOVIE_RESERVE_THEATER, MOVIE_RESERVE_STARTTIME,
+		MOVIE_RESERVE_ID FROM MOVIE_RESERVE WHERE MOVIE_RESERVE_TITLE =
+		#{movie_reserve_title} AND MOVIE_RESERVE_DATE = #{movie_reserve_date}
+	</select>
+
+	<insert id="reserveInsert"
+		parameterType="co.movie.prj.reserve.service.CHReserveVO">
+		INSERT INTO
+		RESERVE(RESERVE_ID,RESERVE_MOVIEID,RESERVE_USERID,RESERVE_MOVIENAME,RESERVE_SELECTEDSEAT,RESERVE_SELECTEDTHEATER,RESERVE_MOVIEDATE,RESERVE_STARTTIME)
+		VALUES(RESERVE_ID_SEQ.NEXTVAL,#{reserve_movieid},#{reserve_userid},#{reserve_moviename},#{reserve_selectedseat},#{reserve_selectedtheater},#{reserve_moviedate},#{reserve_starttime})
+	</insert>
+
+</mapper>

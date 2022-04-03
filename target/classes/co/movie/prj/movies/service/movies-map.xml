@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.movie.prj.movies.service.MoviesMapper">
+
+
+	<select id="moviesSelectList" 
+		resultType="co.movie.prj.movies.service.MoviesVO">
+		SELECT * FROM MOVIE 
+	</select>
+
+	<select id="moviesSelectList2" parameterType="co.movie.prj.movies.service.MoviesVO"
+		resultType="co.movie.prj.movies.service.MoviesVO">
+		SELECT * FROM MOVIE WHERE MOVIE_GENRE = #{movie_genre}
+	</select>
+		
+
+	<select id="moviesSelectListNow"
+		resultType="co.movie.prj.movies.service.MoviesVO">
+		SELECT * FROM MOVIE WHERE SYSDATE BETWEEN MOVIE_STARTDATE
+		AND MOVIE_ENDDATE
+	</select>
+
+	<select id="moviesSelectListBefore"
+		resultType="co.movie.prj.movies.service.MoviesVO">
+		<![CDATA[ SELECT * FROM MOVIE WHERE SYSDATE < MOVIE_STARTDATE ]]>
+	</select>
+
+	<select id="moviesSelectTop3"
+		resultType="co.movie.prj.movies.service.MoviesVO">
+		<![CDATA[
+		SELECT * FROM
+		(SELECT * FROM MOVIE WHERE SYSDATE BETWEEN MOVIE_STARTDATE AND MOVIE_ENDDATE ORDER BY MOVIE_RATE DESC)
+		WHERE ROWNUM <= 3
+		]]>
+	</select>
+
+	<select id="moviesSelect" parameterType="String"
+		resultType="co.movie.prj.movies.service.MoviesVO">
+		SELECT * FROM MOVIE
+		WHERE MOVIE_ID = #{id}
+	</select>
+
+	<insert id="moviesInsert"
+		parameterType="co.movie.prj.movies.service.MoviesVO">
+		INSERT INTO
+		MOVIE(MOVIE_ID,MOVIE_POSTER,MOVIE_TITLE,MOVIE_DIRECTOR,MOVIE_ACTOR,MOVIE_GENRE,MOVIE_RUNNINGTIME,MOVIE_RELEASEDATE,MOVIE_DESCRIPTION,MOVIE_STARTDATE,MOVIE_ENDDATE,MOVIE_TRAILER,MOVIE_COUNT)
+		VALUES(MOVIE_ID_SEQ.NEXTVAL,#{movie_poster},#{movie_title},#{movie_director},#{movie_actor},#{movie_genre},#{movie_runningtime},#{movie_releasedate},#{movie_description},#{movie_startdate},#{movie_enddate},#{movie_trailer},#{movie_count})
+	</insert>
+
+	<update id="moviesUpdateCount"
+		parameterType="co.movie.prj.movies.service.MoviesVO">
+		UPDATE MOVIE SET MOVIE_COUNT = MOVIE_COUNT + 1
+		WHERE
+		MOVIE_TITLE = #{movie_title}
+	</update>
+
+	<!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+
+	<delete id="moviesDelete"
+		parameterType="co.movie.prj.movies.service.MoviesVO">
+		DELETE FROM MEMBER WHERE ID = #{id}
+	</delete>
+
+</mapper>

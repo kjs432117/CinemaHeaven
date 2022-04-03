@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.movie.prj.Client.service.ClientMapper">
+
+
+	<select id="clientSelectList"
+		resultType="co.movie.prj.Client.service.ClientVO">
+		SELECT * FROM MOVIE_CLIENT
+	</select>
+
+
+	<select id="clientSelect"
+		resultType="co.movie.prj.Client.service.ClientVO"
+		parameterType="co.movie.prj.Client.service.ClientVO">
+		SELECT * FROM MOVIE_CLIENT WHERE ID = #{id}
+		<if test="pw != null">
+			AND PW = #{pw}
+		</if>
+	</select>
+
+
+	<!-- 회원가입 -->
+	<insert id="clientInsert"
+		parameterType="co.movie.prj.Client.service.ClientVO">
+		INSERT INTO MOVIE_CLIENT(ID,PW,NAME,TELL,GENRE)
+		VALUES(#{id},#{pw},#{name},#{tell},#{genre})
+	</insert>
+
+
+	<!-- 회원정보-수정 -->
+	<update id="clientUpdate"
+		parameterType="co.movie.prj.Client.service.ClientVO">
+		UPDATE MOVIE_CLIENT 
+		<set>
+		 	<if test="pw != null"> PW = #{pw}, </if>
+		 	<if test="name != null"> NAME = #{name}, </if>
+		 	<if test="author != null"> AUTHOR = #{author}, </if>
+		 	<if test="tell != null"> TELL = #{tell}, </if>
+		 	<if test="genre != null"> GENRE = #{genre}, </if>
+		</set> 
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 회원정보-삭제 -->
+	<delete id="clientDelete"
+		parameterType="co.movie.prj.Client.service.ClientVO">
+		DELETE FROM MOVIE_CLIENT WHERE ID = #{id}
+	</delete>
+
+	<!-- 아이디 중복체크 -->
+	<select id="isIdCheck" parameterType="String"
+		resultType="boolean">
+		SELECT CASE WHEN COUNT(*) = 1 THEN 0 ELSE 1 END AS ID
+		FROM
+		MOVIE_CLIENT WHERE ID = #{id}
+	</select>
+	
+	
+	<select id="clientSearch" resultType="co.movie.prj.Client.service.ClientVO">
+		SELECT * FROM MOVIE_CLIENT
+		<if test="key == ''"> WHERE 1 = 1</if>
+		<if test="key == 'name'"> WHERE NAME LIKE '%'|| #{data} ||'%' </if>
+		<if test="key == 'tell'"> WHERE TELL LIKE '%'|| #{data} ||'%' </if>
+	</select>
+	
+	<select id="clientOne" resultType="co.movie.prj.Client.service.ClientVO">
+		SELECT * FROM MOVIE_CLIENT
+		WHERE ID = #{id}
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.movie.prj.notice.service.NoticeMapper"> <!-- 전체리스트  -->
+	<select id="noticeSelectList" resultType="co.movie.prj.notice.service.NoticeVO">
+	SELECT * FROM MOVIE_NOTICE ORDER BY NOTICE_ID DESC
+	</select>
+	<!-- 단건조회  -->
+	<select id="noticeSelect" resultType="co.movie.prj.notice.service.NoticeVO"
+	parameterType="int">
+	SELECT * FROM MOVIE_NOTICE WHERE NOTICE_id = #{notice_id}
+	</select>
+	<select id="noticeinsertSelect" parameterType="int" resultType="co.movie.prj.notice.service.NoticeVO" >
+	SELECT * FROM MOVIE_NOTICE WHERE NOTICE_ID = #{notice_id}
+	</select>
+	<!-- 입력  -->
+	<insert id="noticeInsert" parameterType="co.movie.prj.notice.service.NoticeVO">
+	<selectKey keyProperty="notice_id" resultType="int" order="BEFORE">
+	SELECT NVL(MAX(NOTICE_ID) + 1, 1 ) AS NOTICE_ID FROM MOVIE_NOTICE
+	</selectKey>
+	INSERT INTO MOVIE_NOTICE(NOTICE_ID, NOTICE_WRITERNAME, NOTICE_TITLE,
+	NOTICE_SUBJECT, NOTICE_ATTACHE)
+	VALUES(#{notice_id}, #{notice_writername}, #{notice_title}, #{notice_subject}, #{notice_attache})
+	</insert>
+	<!-- 삭제  -->
+	<delete id="noticeDelete" parameterType="co.movie.prj.notice.service.NoticeVO">
+	DELETE FROM MOVIE_NOTICE WHERE NOTICE_ID =#{notice_id}
+	</delete>
+	
+	
+	<!-- 수정  -->
+	<update id="noticeUpdate" parameterType="co.movie.prj.notice.service.NoticeVO">
+	UPDATE MOVIE_NOTICE 
+  	 SET
+	NOTICE_TITLE = #{notice_title},
+  	 NOTICE_SUBJECT = #{notice_subject}
+   	WHERE NOTICE_ID = #{notice_id}
+	<!-- 조회수업데이트  -->
+	</update>
+	
+	
+	<update id="noticeHitUpdate" parameterType="int">
+		UPDATE MOVIE_NOTICE SET NOTICE_HIT = NOTICE_HIT + 1 WHERE NOTICE_ID = #{notice_id}
+	</update>
+	
+	
+	
+	<!-- 번호업데이트  -->
+	<update id="noticeIdUpdate" parameterType="int">
+		<![CDATA[
+		UPDATE MOVIE_NOTICE SET NOTICE_ID = NOTICE_ID - 1 
+		WHERE NOTICE_ID > #{notice_id}
+		]]>
+	</update>
+
+	<select id="noticeSearch" resultType="co.movie.prj.notice.service.NoticeVO">
+	SELECT FROM MOVIE_NOTICE
+	WHERE
+	<if test="key == ''">  1 = 1</if>
+	 <if test="key == 'notice_writername'">   NOTICE_WRITERNAME LIKE '%'|| #{data} ||'%'</if>
+	 <if test="key == 'notice_title'">  NOTICE_TITLE LIKE '%'|| #{data} ||'%'</if>
+	 <if test="key == 'notice_subject'">  NOTICE_SUBJECT LIKE '%'|| #{data} ||'%'</if>
+	</select>
+</mapper>

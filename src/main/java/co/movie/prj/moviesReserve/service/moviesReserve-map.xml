@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="co.movie.prj.moviesReserve.service.MoviesReserveMapper">
+
+	<select id="moviesReserveSelectList"
+		resultType="co.movie.prj.moviesReserve.service.MoviesReserveVO">
+		SELECT * FROM MOVIE_RESERVE
+	</select>
+
+	<insert id="moviesReserveInsert"
+		parameterType="co.movie.prj.moviesReserve.service.MoviesReserveVO">
+		INSERT INTO
+		MOVIE_RESERVE(MOVIE_RESERVE_ID,MOVIE_RESERVE_TITLE,MOVIE_RESERVE_RUNNINGTIME,MOVIE_RESERVE_DATE,MOVIE_RESERVE_THEATER,MOVIE_RESERVE_STARTTIME)
+		VALUES(MOVIE_RESERVE_ID_SEQ.NEXTVAL,#{movie_reserve_title},#{movie_reserve_runningtime},#{movie_reserve_date},#{movie_reserve_theater},#{movie_reserve_starttime})
+	</insert>
+
+
+</mapper>
